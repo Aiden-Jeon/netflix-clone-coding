@@ -1,16 +1,33 @@
 import { useCallback, useState } from "react";
 import axios from "axios";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+import { getSession, signIn } from "next-auth/react";
+import { NextPageContext } from 'next';
+// import { useRouter } from "next/router";
 
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 
 import Input from "@/components/Input";
 
-const Auth = () => {
-  const router = useRouter();
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
 
+  if (session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
+
+const Auth = () => {
+  // const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,23 +38,20 @@ const Auth = () => {
     setVariant((currentVariant) => currentVariant === "login" ? "register" : "login")
   }, []);
 
-
   // 로그인
   const login = useCallback(async () => {
     try {
-
       await signIn('credentials', {
         email,
         password,
-        redirect: false,
-        callbackUrlL: "/"
+        callbackUrlL: "/profiles"
       })
-      // 로그인 성공 후 홈으로 푸쉬하기
-      router.push("/");
+      // // 로그인 성공 후 홈으로 푸쉬하기
+      // router.push("/");
     } catch (error) {
       console.log(error)
     }
-  }, [email, password, router]);
+  }, [email, password]);
 
   // 회원 가입
   const register = useCallback(async () => {
@@ -94,12 +108,12 @@ const Auth = () => {
               />
               <button onClick={variant === "login" ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {/* Login */}
-                {variant === "login" ? "Login" : "Sing up"}
+                {variant === "login" ? "Login" : "Sign up"}
               </button>
               {/* github and google login button */}
               <div className="flex flex-row items-center gap-4 mt-8 justify-center">
                 <div
-                  onClick={() => signIn("github", { callbackUrl: "/" })}
+                  onClick={() => signIn("github", { callbackUrl: "/profiles" })}
                   className="
                     w-10
                     h-10
@@ -115,7 +129,7 @@ const Auth = () => {
                   <FaGithub size={30} />
                 </div>
                 <div
-                  onClick={() => signIn("google", { callbackUrl: "/" })}
+                  onClick={() => signIn("google", { callbackUrl: "/profiles" })}
                   className="
                     w-10
                     h-10

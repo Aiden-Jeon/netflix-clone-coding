@@ -1,5 +1,4 @@
 // next 에서 auth 확인하는 api
-
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt";
