@@ -2,6 +2,8 @@
 
 ## Getting Started
 
+### DB
+
 First, run postgresql container:
 
 ```bash
@@ -10,9 +12,17 @@ docker run -d \
   -p 5432:5432 \
   -e POSTGRES_USER=myuser \
   -e POSTGRES_PASSWORD=mypassword \
-  -e POSTGRES_DB=neflix \
+  -e POSTGRES_DB=netflix \
   postgres:14.0
 ```
+
+push schema to database
+
+```
+npx prisma db push
+```
+
+### Server
 
 Second, run the development server:
 
