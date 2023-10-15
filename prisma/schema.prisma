@@ -12,7 +12,8 @@ datasource db {
 
 // 매번 새로 올리는데 문제가 생길 수 있으니 튜토리얼에서는 db schema 를 먼저 만들어 둔다.
 model User {
-  id             Int       @id @default(autoincrement()) @map("_id")
+  id             String    @id @default(cuid())
+  user_id        Int       @default(autoincrement())
   name           String
   image          String?
   email          String?   @unique
@@ -20,14 +21,15 @@ model User {
   hashedPassword String?
   createAt       DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  favoriteIds    Int[]
+  favoriteIds    String[]
   sessions       Session[]
   accounts       Account[]
 }
 
 model Account {
-  id                Int     @id @default(autoincrement()) @map("_id")
-  userId            Int
+  id                String  @id @default(cuid())
+  account_id        Int     @default(autoincrement())
+  userId            String
   type              String
   provider          String
   // providerAccountId 는 string
@@ -35,7 +37,7 @@ model Account {
   // 구글 토큰 연결 때문에 필요한 부분
   refresh_token     String?
   access_token      String?
-  expries_at        Int?
+  expires_at        Int?
   token_type        String?
   scope             String?
   id_token          String?
@@ -48,25 +50,28 @@ model Account {
 }
 
 model Session {
-  id           Int      @id @default(autoincrement()) @map("_id")
+  id           String   @id @default(cuid())
+  session_id   Int      @default(autoincrement())
   sessionToken String   @unique
-  userId       Int
+  userId       String
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-  id         Int      @id @default(autoincrement()) @map("_id")
-  identifier String
-  token      String   @unique
-  expires    DateTime
+  id                   String   @id @default(cuid())
+  verificationtoken_id Int      @default(autoincrement())
+  identifier           String
+  token                String   @unique
+  expires              DateTime
 
   @@unique([identifier, token])
 }
 
 model Movie {
-  id           Int    @id @default(autoincrement()) @map("_id")
+  id           String @id @default(cuid())
+  movie_id     Int    @default(autoincrement())
   title        String
   description  String
   videoUrl     String

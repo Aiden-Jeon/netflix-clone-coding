@@ -66,7 +66,7 @@ const Auth = () => {
           <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
             <h2 className="text-white text-4xl mb-8 font-semibold">
               {/* Sign in */}
-              {variant === "login" ? "Sing In" : "Register"}
+              {variant === "login" ? "Sign In" : "Register"}
             </h2>
             <div className="flex flex-col gap-4">
               {variant === "register" && (
@@ -115,7 +115,7 @@ const Auth = () => {
                   <FaGithub size={30} />
                 </div>
                 <div
-
+                  onClick={() => signIn("google", { callbackUrl: "/" })}
                   className="
                     w-10
                     h-10
@@ -130,7 +130,6 @@ const Auth = () => {
                   ">
                   <FcGoogle size={30} />
                 </div>
-
               </div>
               <p className="text-neutral-500 mt-12">
                 {variant === "login" ? "First time using Netflix?" : "Already have an account?"}
