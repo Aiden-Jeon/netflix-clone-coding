@@ -9,6 +9,7 @@ import { FaGithub } from "react-icons/fa"
 
 import Input from "@/components/Input";
 
+// redirect 사용하려면 추가해야함
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
 
