@@ -1,7 +1,13 @@
-import Input from "@/components/Input";
 import { useCallback, useState } from "react";
+import axios from "axios";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+
+import Input from "@/components/Input";
 
 const Auth = () => {
+  const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +17,38 @@ const Auth = () => {
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) => currentVariant === "login" ? "register" : "login")
   }, []);
+
+
+  // 로그인
+  const login = useCallback(async () => {
+    try {
+
+      await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrlL: "/"
+      })
+      // 로그인 성공 후 홈으로 푸쉬하기
+      router.push("/");
+    } catch (error) {
+      console.log(error)
+    }
+  }, [email, password, router]);
+
+  // 회원 가입
+  const register = useCallback(async () => {
+    try {
+      await axios.post("/api/register", {
+        email, name, password
+      })
+      // 회원 가입 후 login 으로 보내기
+      login();
+    } catch (error) {
+      console.log(error)
+    }
+
+  }, [email, name, password, login]);  // 의존성 주입
   return (
     // 배경 집어넣는 부분
     <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -51,7 +89,7 @@ const Auth = () => {
                 type="password"
                 value={password}
               />
-              <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+              <button onClick={variant === "login" ? login : register} className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
                 {/* Login */}
                 {variant === "login" ? "Login" : "Sing up"}
               </button>
