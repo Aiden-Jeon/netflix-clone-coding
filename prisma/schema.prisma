@@ -14,9 +14,9 @@ datasource db {
 model User {
   id             Int       @id @default(autoincrement()) @map("_id")
   name           String
-  iamge          String?
+  image          String?
   email          String?   @unique
-  emailVerifed   DateTime?
+  emailVerified  DateTime?
   hashedPassword String?
   createAt       DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
@@ -30,7 +30,8 @@ model Account {
   userId            Int
   type              String
   provider          String
-  providerAccountId Int
+  // providerAccountId 는 string
+  providerAccountId String
   // 구글 토큰 연결 때문에 필요한 부분
   refresh_token     String?
   access_token      String?
@@ -41,7 +42,7 @@ model Account {
   session_state     String?
 
   // onDelete: 유저가 지워지면 어떻게 할까 ? 
-  User User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -52,7 +53,7 @@ model Session {
   userId       Int
   expires      DateTime
 
-  User User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {

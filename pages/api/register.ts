@@ -30,8 +30,8 @@ export default async function handler(
                 email,
                 name,
                 hashedPassword,
-                // image: "",
-                // emailVerified: new Date(),
+                image: "",
+                emailVerified: new Date(),
             },
         });
         return res.status(200).json(user);
