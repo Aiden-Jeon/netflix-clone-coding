@@ -18,7 +18,7 @@ docker run -d \
 
 Second, push schema to database
 
-```
+```bash
 npx prisma db push
 ```
 
